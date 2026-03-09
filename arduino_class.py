@@ -1,5 +1,4 @@
 # v1
-import serial
 import py_serial_lib
 
 

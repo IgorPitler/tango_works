@@ -1,7 +1,10 @@
+#v1
 #import tango
 #dev = tango.DeviceProxy("sys/tg_test/1")
 # or using a network address format if not using the Tango database
 # dev = tango.DeviceProxy("tango://hostname:port/sys/tg_test/1#dbase=no")
+
+import tango
 
 from sardana import State
 
@@ -13,8 +16,12 @@ class ArduinoMotorController(MotorController):
     motor_position = 0
 
     def __init__(self, inst, props, *args, **kwargs):
-        #super(SpringfieldMotorController, self).__init__(inst, props, *args, **kwargs)
-        super().__init__()
+
+        super(MotorController, self).__init__(inst, props, *args, **kwargs)
+
+        # test arduino tango device
+        self.tango_dev = tango.DeviceProxy("lab1/table1/dev1")
+
         # initialize hardware communication
         #self.springfield = springfieldlib.SpringfieldMotorHW()
         # do some initialization
@@ -61,6 +68,7 @@ class ArduinoMotorController(MotorController):
             return State.Moving, "Motor is moving"
         elif self.motor_state == 3:
             return State.Fault, "Motor has an error"
+        return 0
 
     def StartOne(self, axis, position):
         """Move the specified motor to the specified position"""
@@ -71,6 +79,12 @@ class ArduinoMotorController(MotorController):
         self.motor_state = 2
         self.motor_position = position
         self.motor_state = 1
+
+        #arduino test
+        if position == 0:
+            self.tango_dev.set_led_off()
+        if position == 1:
+            self.tango_dev.set_led_on()
 
     def StopOne(self, axis):
         """Stop the specified motor"""

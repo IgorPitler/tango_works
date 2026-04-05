@@ -23,7 +23,7 @@ class ArduinoMotorController(MotorController):
         self.tango_dev = tango.DeviceProxy("lab1/table1/dev1")
 
         # initialize hardware communication
-        #self.springfield = springfieldlib.SpringfieldMotorHW()
+
         # do some initialization
         #self._motors = {}
         self.motor_state = 1
@@ -53,14 +53,14 @@ class ArduinoMotorController(MotorController):
 
     def ReadOne(self, axis):
         """Get the specified motor position"""
-        #return self.springfield.getPosition(axis)
+
         # don't use axis number
         return self.motor_position
 
     def StateOne(self, axis):
         """Get the specified motor state"""
-        #springfield = self.springfield
-        #state = springfield.getState(axis)
+
+
         # don't use axis number
         if self.motor_state == 1:
             return State.On, "Motor is stopped"
@@ -72,7 +72,7 @@ class ArduinoMotorController(MotorController):
 
     def StartOne(self, axis, position):
         """Move the specified motor to the specified position"""
-        #self.springfield.move(axis, position)
+
 
         # don't use axis number
         #for test
@@ -88,7 +88,7 @@ class ArduinoMotorController(MotorController):
 
     def StopOne(self, axis):
         """Stop the specified motor"""
-        #self.springfield.stop(axis)
+
         # don't use axis number
         self.motor_state = 1
 

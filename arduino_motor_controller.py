@@ -1,4 +1,4 @@
-#v1
+#v2
 #import tango
 #dev = tango.DeviceProxy("sys/tg_test/1")
 # or using a network address format if not using the Tango database

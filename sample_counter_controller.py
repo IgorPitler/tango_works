@@ -34,6 +34,7 @@ class SampleCounterController(CounterTimerController):
         pass
 
     def StartOne(self, axis: int, value: float):
+        #self.counter_value = randint(0, 10)
         pass
 
     def StopOne(self, axis: int):

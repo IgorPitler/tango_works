@@ -23,6 +23,7 @@ class SampleCounterController(CounterTimerController):
     def DeleteDevice(self, axis: int):
         pass
 
+    # in Spock read: counter1.Value
     def ReadOne(self, axis: int) -> Any:
         self.counter_value=randint(0, 10)
         return self.counter_value

@@ -6,10 +6,12 @@ class Sample_pseudo_motor_controller(PseudoMotorController):
     # slit
     pseudo_motor_position = 0
 
+    # not mandatory?
     mot_top_postion=0 # 0
     mot_bottom_postion=0 # 1
 
     motor_roles = "mot_top", "mot_bottom"
+    #pseudo_motor_roles = "Sample_pseudo_motor_controller", "empty"
 
     def __init__(self, inst, props, *args, **kwargs):
         PseudoMotorController.__init__(self, inst, props, *args, **kwargs)

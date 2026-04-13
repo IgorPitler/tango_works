@@ -4,6 +4,8 @@ from sardana.pool.controller import PseudoMotorController
 
 class Sample_pseudo_motor_controller(PseudoMotorController):
     # slit
+
+    # not mandatory?
     pseudo_motor_position = 0
 
     # not mandatory?

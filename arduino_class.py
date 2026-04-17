@@ -28,17 +28,11 @@ class ArduinoDevice:
         return self.led_state
 
     def set_led_on(self):
-        start_time = time.perf_counter()
         self.real_arduino.send("ON.")
-        end_time = time.perf_counter()
-        print(f"real_arduino set_led_on Execution time: {end_time - start_time:.7f} seconds")
         self.led_state = "ON"
 
     def set_led_off(self):
-        start_time = time.perf_counter()
         self.real_arduino.send("OFF.")
-        end_time = time.perf_counter()
-        print(f"real_arduino set_led_off Execution time: {end_time - start_time:.7f} seconds")
         self.led_state = "OFF"
 
     def close(self):

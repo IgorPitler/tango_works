@@ -23,9 +23,6 @@ class ArduinoMotorController(MotorController):
         # test arduino tango device
         self.tango_dev = tango.DeviceProxy("lab1/table1/dev1")
 
-        print("ArduinoMotorController __init__ DeviceProxy ready")
-
-
         # initialize hardware communication
 
         # do some initialization
@@ -47,8 +44,6 @@ class ArduinoMotorController(MotorController):
         # don't use axis number
         self.motor_state = 1
         self.motor_position = 0
-
-        print("ArduinoMotorController AddDevice")
 
     def DeleteDevice(self, axis):
         # some action, no matter
@@ -86,14 +81,11 @@ class ArduinoMotorController(MotorController):
         self.motor_position = position
         self.motor_state = 1
 
-        start_time = time.perf_counter()
         #arduino test
         if position == 0:
             self.tango_dev.set_led_off()
         if position == 1:
             self.tango_dev.set_led_on()
-        end_time = time.perf_counter()
-        print(f"ArduinoMotorController TangoDevice LED ON OFF Execution time: {end_time - start_time:.7f} seconds")
 
     def StopOne(self, axis):
         """Stop the specified motor"""

@@ -3,6 +3,7 @@
 #dev = tango.DeviceProxy("sys/tg_test/1")
 # or using a network address format if not using the Tango database
 # dev = tango.DeviceProxy("tango://hostname:port/sys/tg_test/1#dbase=no")
+import time
 
 import tango
 
@@ -21,6 +22,9 @@ class ArduinoMotorController(MotorController):
 
         # test arduino tango device
         self.tango_dev = tango.DeviceProxy("lab1/table1/dev1")
+
+        print("ArduinoMotorController __init__ DeviceProxy ready")
+
 
         # initialize hardware communication
 
@@ -43,6 +47,8 @@ class ArduinoMotorController(MotorController):
         # don't use axis number
         self.motor_state = 1
         self.motor_position = 0
+
+        print("ArduinoMotorController AddDevice")
 
     def DeleteDevice(self, axis):
         # some action, no matter
@@ -80,11 +86,14 @@ class ArduinoMotorController(MotorController):
         self.motor_position = position
         self.motor_state = 1
 
+        start_time = time.perf_counter()
         #arduino test
         if position == 0:
             self.tango_dev.set_led_off()
         if position == 1:
             self.tango_dev.set_led_on()
+        end_time = time.perf_counter()
+        print(f"ArduinoMotorController TangoDevice LED ON OFF Execution time: {end_time - start_time:.7f} seconds")
 
     def StopOne(self, axis):
         """Stop the specified motor"""

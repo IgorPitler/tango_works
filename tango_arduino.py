@@ -1,4 +1,5 @@
 # v1
+from logging import DEBUG
 from os import access
 
 import arduino_class
@@ -12,6 +13,13 @@ from tango import AttrQuality, DispLevel, DevState
 class tango_arduino(Device):
 
     port_name = device_property(dtype=str)
+
+    logging_level = device_property(dtype=str)
+    current_logging_level = device_property(dtype=str)
+    logging_target = device_property(dtype=str)
+    current_logging_target = device_property(dtype=str)
+    logging_rft = device_property(dtype=str) # file size
+    logging_path = device_property(dtype=str) # file path
 
     @attribute(dtype=str)
     def led_state(self):
@@ -29,12 +37,16 @@ class tango_arduino(Device):
         self.set_state(DevState.ON)
         print("Turning ON the LED")
 
+        self.debug_stream("Turning ON the LED")
+
     @command()
     def set_led_off(self):
         self.arduino_device.set_led_off()
         self.set_status("Status: LED is OFF")
         self.set_state(DevState.OFF)
         print("Turning OFF the LED")
+
+        self.debug_stream("Turning OFF the LED")
 
     def init_device(self):
         super().init_device()  # call first
@@ -43,6 +55,14 @@ class tango_arduino(Device):
         self.arduino_device = arduino_class.ArduinoDevice(self.port_name, 9600)
         self.set_state(DevState.INIT)
         self.set_status("Status: Init")
+
+        # setting up logging
+        #self.logging_target = "device::lab1/table1/dev2"
+        #self.current_logging_target="device::lab1/table1/dev2"
+        #self.logging_level = 5  # DEBUG
+        #self.current_logging_level = 5 # DEBUG
+
+
 
     def delete_device(self):
         self.arduino_device.close()

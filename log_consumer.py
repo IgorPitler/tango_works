@@ -7,7 +7,6 @@ from tango import  DevState
 
 class log_consumer(Device):
 
-    log_file_name = device_property(dtype=str)
     log_recording_is_active=True # by default
 
     def init_device(self):

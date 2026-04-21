@@ -59,8 +59,8 @@ class tango_arduino(Device):
         # setting up logging
         #self.logging_target = "device::lab1/table1/dev2"
         #self.current_logging_target="device::lab1/table1/dev2"
-        #self.logging_level = 5  # DEBUG
-        #self.current_logging_level = 5 # DEBUG
+        #self.logging_level = 4  # DEBUG
+        #self.current_logging_level = 4# DEBUG
 
 
 

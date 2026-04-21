@@ -1,5 +1,5 @@
 #v1
-
+import tango
 from tango.server import Device
 from tango.server import attribute, command
 from tango.server import device_property
@@ -14,7 +14,7 @@ class log_consumer(Device):
         super().init_device()  # call first
         print("Starting log consumer device...")
 
-    @command()
+    @command(dtype_in=tango.DevVarStringArray)
     def log(self, details):
         #details[0]: the timestamp in millisecond
         #details[1]: the log level

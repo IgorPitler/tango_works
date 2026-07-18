@@ -9,7 +9,7 @@ from tango import AttrQuality, DispLevel, DevState
 
 class tango_demodev1(Device):
 
-    demo_propery = device_property(dtype=str)
+    demo_property = device_property(dtype=str)
 
     logging_level = device_property(dtype=str)
     current_logging_level = device_property(dtype=str)

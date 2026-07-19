@@ -7,7 +7,7 @@ from tango.server import attribute, command
 from tango.server import device_property
 from tango import AttrQuality, DispLevel, DevState
 
-class tango_demodev1(Device):
+class TangoDemodev1(Device):
 
     demo_property = device_property(dtype=str)
 
@@ -21,16 +21,29 @@ class tango_demodev1(Device):
 
     @attribute(dtype=str)
     def demo_attribute(self):
-        return "demo_attribute_value"
+        res="demo_attribute_value"
+        return res
 
     def init_device(self):
         super().init_device()  # call first
+
+        # setup device polling
+        self.poll_attribute("demo_attribute", 300)
+        self.poll_attribute("State", 300)
+        self.poll_attribute("Status", 300)
+
         print("Starting our demo device...")
+
+        self.debug_stream("demodev1 is initialized")
 
     def delete_device(self):
         #self.arduino_device.close()
         print("Deleting demo device...")
         super().delete_device()  # call last
 
+    @command()
+    def demo_command(self):
+        print("Demo command!")
+
 if __name__ == "__main__":
-    tango_demodev1.run_server()
+    TangoDemodev1.run_server()

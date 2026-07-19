@@ -1,6 +1,8 @@
 import PyTango
 import tango
 
+##### YOU DON'T NEED THIS SCRIPT NOW!!!!
+
 device_name="lab1/table1/dev3"
 
 print("Setting up attributes polling...")

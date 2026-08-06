@@ -7,4 +7,6 @@ with open("sample.sql", "r") as filehandle:
     res = subprocess.run(["mariadb","-utango", "-ptango"], capture_output=True, stdin=filehandle, text=True)
 print(res.stdout)
 
+print (res.returncode)
+
 print("The end.")

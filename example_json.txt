@@ -1,0 +1,18 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "555-1234"
+    },
+    {
+      "type": "office",
+      "number": "777-1234"
+    }
+  ]
+}

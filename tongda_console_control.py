@@ -1,20 +1,16 @@
 # Tongda TD-5000 console controls
 #v1.0
 
-def check_limits(phi, theta, omega, kappa, detector_pos):
-    allow = True
-    # here we will check if the axis positions are dangerous
-
-    return allow
-
+import tongda_lib
 
 def main():
     main_ip = "192.168.188.10"
     main_port = 502
     detector_ip = "192.168.188.30"
     detector_port = 502
-    main_connected=False
-    detector_connected=False
+
+    td_dev=tongda_lib.td5000(main_ip,main_port,detector_ip,detector_port)
+
     working = True
 
     print("Tongda TD-5000 console controls")
@@ -32,11 +28,14 @@ def main():
                 try:
                     match command_input[1]:
                         case "all":
-                            print("connect all OK")
+                            td_dev.connect_all()
+                            #print("connect all OK")
                         case "main":
-                            print("connect main OK")
+                            td_dev.connect_main()
+                            #print("connect main OK")
                         case "detector":
-                            print("connect detector OK")
+                            td_dev.connect_detector()
+                            #print("connect detector OK")
                         case _:
                             print("command error")
                 except Exception as e:
@@ -46,11 +45,14 @@ def main():
                 try:
                     match command_input[1]:
                         case "all":
-                            print("disconnect all OK")
+                            td_dev.disconnect_all()
+                            #print("disconnect all OK")
                         case "main":
-                            print("disconnect main OK")
+                            td_dev.disconnect_main()
+                            #print("disconnect main OK")
                         case "detector":
-                            print("disconnect detector OK")
+                            td_dev.disconnect_detector()
+                            #print("disconnect detector OK")
                         case _:
                             print("command error")
                 except Exception as e:

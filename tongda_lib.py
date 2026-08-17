@@ -1,3 +1,4 @@
+import struct
 from pymodbus.client import ModbusTcpClient
 
 class td5000:
@@ -32,8 +33,10 @@ class td5000:
                 self._init_controller()
             else:
                 print(f"Main Connection error: {self.main_ip}:{self.main_port}")
+                self.client_main=None
         except Exception as e:
             print(f"Main connection error: {e}")
+            self.client_main = None
         print("connect main sent")
 
     def connect_detector(self):
@@ -43,35 +46,206 @@ class td5000:
                 print(f"Detector TCP Connection successfully: {self.detector_ip}:{self.detector_port}")
             else:
                 print(f"Detector Connection error: {self.detector_ip}:{self.detector_port}")
+                self.client_detector = None
         except Exception as e:
             print(f"Detector connection error: {e}")
+            self.client_detector = None
         print("connect detector sent")
 
     def disconnect_all(self):
         self.disconnect_main()
         self.disconnect_detector()
-        print("disconnect all OK")
+        print("disconnect all sent")
 
     def disconnect_main(self):
         try:
-            pass
+            if self.client_main:
+                self._close_controller()
+                self.client_main.close()
+                self.client_main = None
+                print("Main client disconnected.")
+            else:
+                print("Main client was not connected")
         except Exception as e:
-            pass
+            print(f"Disconnect main exception: {e}")
         print("disconnect main sent")
 
     def disconnect_detector(self):
         try:
-            pass
+            if self.client_detector:
+                self.client_detector.close()
+                self.client_detector = None
+                print("Detector client disconnected.")
+            else:
+                print("Detector client was not connected")
         except Exception as e:
-            pass
+            print(f"Disconnect detector exception: {e}")
         print("disconnect detector sent")
 
+    # for main only
     def _init_controller(self):
-        # for Main only!
-        pass
+        self.process_command({'type': 'init_controller'})
 
+    # for main only
     def _close_controller(self):
-        pass
+        self.process_command({'type': 'close_controller'})
+
+    def _regs_to_float(self, r0, r1, byteorder='>'):
+        try:
+            b = struct.pack(byteorder + 'HH', r0, r1)
+            return struct.unpack(byteorder + 'f', b)[0]
+        except Exception as e:
+            print(f"Exception _regs_to_float: {e}")
+            return 0.0
+
+    def _send_safe_write(self, client, reg, value):
+        self.process_command({'type': 'safe_write', 'client': client, 'reg': reg, 'value': value})
+
+    def _send_write_float(self, client, reg0, reg1, value):
+        self.process_command({'type': 'write_float', 'client': client, 'reg0': reg0, 'reg1': reg1, 'value': value})
+
+    # !!!! доработать вывод в принт
+    def process_command(self, cmd: dict):
+        """Process a command. All modbus read/writes go through here.
+
+        Command examples:
+            {'type': 'safe_write', 'client': 'main'|'detector', 'reg': int, 'value': int}
+            {'type': 'write_float', 'client': 'main'|'detector', 'reg0': int, 'reg1': int, 'value': float}
+            {'type': 'init_controller'}
+            {'type': 'close_controller'}
+        """
+        try:
+            t = cmd.get('type')
+            client_name = cmd.get('client', 'main')
+            client = self.client_main if client_name == 'main' else self.client_detector
+
+            if t == 'safe_write':
+                reg = int(cmd['reg'])
+                value = int(cmd['value'])
+                if client:
+                    res = client.write_register(address=reg, value=value)
+                    if hasattr(res, 'isError') and res.isError():
+                        #self.log.emit(f"Write error reg {reg}: {res}")
+                        self.set_error(f"Write error reg {reg}: {res}")
+                    else:
+                        #self.log.emit(f"Write reg {reg} = {value} ({client_name})")
+                        pass
+                else:
+                    #self.log.emit(f"Write failed: client {client_name} not connected")
+                    self.set_error(f"Write failed: client {client_name} not connected")
+                    pass
+
+            elif t == 'write_float':
+                reg0 = int(cmd['reg0'])
+                reg1 = int(cmd['reg1'])
+                val = float(cmd['value'])
+                b = struct.pack('>f', val)
+                regv0, regv1 = struct.unpack('>HH', b)
+                # write two registers sequentially
+                if client:
+                    r1 = client.write_register(address=reg0, value=regv0)
+                    if hasattr(r1, 'isError') and r1.isError():
+                        #self.log.emit(f"Write float part1 error reg {reg0}: {r1}")
+                        self.set_error(f"Write float part1 error reg {reg0}: {r1}")
+                        pass
+                    else:
+                        #self.log.emit(f"Write reg {reg0} = {regv0} ({client_name})")
+                        pass
+                    r2 = client.write_register(address=reg1, value=regv1)
+                    if hasattr(r2, 'isError') and r2.isError():
+                        #self.log.emit(f"Write float part2 error reg {reg1}: {r2}")
+                        self.set_error(f"Write float part2 error reg {reg1}: {r2}")
+                        pass
+                    else:
+                        #self.log.emit(f"Write reg {reg1} = {regv1} ({client_name})")
+                        #self.log.emit(f"Write float regs {reg0},{reg1} = {val} ({client_name})")
+                        pass
+                else:
+                    #self.log.emit(f"Write float failed: client {client_name} not connected")
+                    self.set_error(f"Write float failed: client {client_name} not connected")
+                    pass
+
+            elif t == 'init_controller':
+                # follow original sequence but all to main client
+                if self.client_main:
+                    seq = [(120, 0), (119, 2560), (120, 4096), (119, 512)]
+                    for reg, val in seq:
+                        r = self.client_main.write_register(address=reg, value=val)
+                        time.sleep(0.05)
+                    #self.log.emit("Controller init sequence executed")
+                else:
+                    #self.log.emit("Init failed: main client not connected")
+                    self.set_error("Init failed: main client not connected")
+                    pass
+
+            elif t == 'close_controller':
+                if self.client_main:
+                    seq = [(119, 512), (100, 1280), (35, 1280), (70, 1280), (0, 1280), (120, 512), (120, 8192)]
+                    for reg, val in seq:
+                        r = self.client_main.write_register(address=reg, value=val)
+                        time.sleep(0.05)
+                    #self.log.emit("Controller close sequence executed")
+                else:
+                    #self.log.emit("Close failed: main client not connected")
+                    self.set_error("Close failed: main client not connected")
+                    pass
+
+            else:
+                #self.log.emit(f"Unknown command type: {t}")
+                self.set_error(f"Unknown command type: {t}")
+                pass
+        except Exception as e:
+            #self.log.emit(f"Exception processing command {cmd}: {e}")
+            self.set_error(f"Exception processing command {cmd}: {e}")
+            pass
+
+    def controller_main_read_register_pair(self, address_first):
+        registers_value=0.0
+        try:
+            if self.client_main:
+                resp = self.client_main.read_holding_registers(address=address_first, count=2)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    registers_value = self._regs_to_float(regs[0], regs[1])
+                else:
+                    print(f"Main modbus read error: {resp}")
+            else:
+                print("Main client not connected")
+        except Exception as e:
+            print(f"Exception polling main: {e}")
+        return registers_value
+
+    def controller_main_read_register_single(self, address_first):
+        register_value=0.0
+        try:
+            if self.client_main:
+                resp = self.client_main.read_holding_registers(address=address_first, count=1)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    register_value = self._regs_to_float(regs[0], 0)
+                else:
+                    print(f"Main modbus read error: {resp}")
+            else:
+                print("Main client not connected")
+        except Exception as e:
+            print(f"Exception polling main: {e}")
+        return register_value
+
+    def controller_detector_read_register_pair(self, address_first):
+        registers_value=0.0
+        try:
+            if self.client_detector:
+                resp = self.client_detector.read_holding_registers(address=address_first, count=2)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    registers_value = self._regs_to_float(regs[0], regs[1])
+                else:
+                    print(f"Detector modbus read error: {resp}")
+            else:
+                print("Detector client not connected")
+        except Exception as e:
+            print(f"Exception polling detector: {e}")
+        return registers_value
 
     # Доработать позже!
     def check_limits(phi, theta, omega, kappa, detector_pos):

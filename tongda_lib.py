@@ -1,4 +1,6 @@
 import struct
+import time
+
 from pymodbus.client import ModbusTcpClient
 
 class td5000:
@@ -126,14 +128,13 @@ class td5000:
                     res = client.write_register(address=reg, value=value)
                     if hasattr(res, 'isError') and res.isError():
                         #self.log.emit(f"Write error reg {reg}: {res}")
-                        self.set_error(f"Write error reg {reg}: {res}")
+                        print(f"Write error reg {reg}: {res}")
                     else:
                         #self.log.emit(f"Write reg {reg} = {value} ({client_name})")
                         pass
                 else:
                     #self.log.emit(f"Write failed: client {client_name} not connected")
-                    self.set_error(f"Write failed: client {client_name} not connected")
-                    pass
+                    print(f"Write failed: client {client_name} not connected")
 
             elif t == 'write_float':
                 reg0 = int(cmd['reg0'])
@@ -146,7 +147,7 @@ class td5000:
                     r1 = client.write_register(address=reg0, value=regv0)
                     if hasattr(r1, 'isError') and r1.isError():
                         #self.log.emit(f"Write float part1 error reg {reg0}: {r1}")
-                        self.set_error(f"Write float part1 error reg {reg0}: {r1}")
+                        print(f"Write float part1 error reg {reg0}: {r1}")
                         pass
                     else:
                         #self.log.emit(f"Write reg {reg0} = {regv0} ({client_name})")
@@ -154,7 +155,7 @@ class td5000:
                     r2 = client.write_register(address=reg1, value=regv1)
                     if hasattr(r2, 'isError') and r2.isError():
                         #self.log.emit(f"Write float part2 error reg {reg1}: {r2}")
-                        self.set_error(f"Write float part2 error reg {reg1}: {r2}")
+                        print(f"Write float part2 error reg {reg1}: {r2}")
                         pass
                     else:
                         #self.log.emit(f"Write reg {reg1} = {regv1} ({client_name})")
@@ -162,8 +163,7 @@ class td5000:
                         pass
                 else:
                     #self.log.emit(f"Write float failed: client {client_name} not connected")
-                    self.set_error(f"Write float failed: client {client_name} not connected")
-                    pass
+                    print(f"Write float failed: client {client_name} not connected")
 
             elif t == 'init_controller':
                 # follow original sequence but all to main client
@@ -175,8 +175,7 @@ class td5000:
                     #self.log.emit("Controller init sequence executed")
                 else:
                     #self.log.emit("Init failed: main client not connected")
-                    self.set_error("Init failed: main client not connected")
-                    pass
+                    print("Init failed: main client not connected")
 
             elif t == 'close_controller':
                 if self.client_main:
@@ -186,18 +185,15 @@ class td5000:
                         time.sleep(0.05)
                     #self.log.emit("Controller close sequence executed")
                 else:
-                    #self.log.emit("Close failed: main client not connected")
-                    self.set_error("Close failed: main client not connected")
-                    pass
+                    print("Close failed: main client not connected")
 
             else:
                 #self.log.emit(f"Unknown command type: {t}")
-                self.set_error(f"Unknown command type: {t}")
+                print(f"Unknown command type: {t}")
                 pass
         except Exception as e:
             #self.log.emit(f"Exception processing command {cmd}: {e}")
-            self.set_error(f"Exception processing command {cmd}: {e}")
-            pass
+            print(f"Exception processing command {cmd}: {e}")
 
     def controller_main_read_register_pair(self, address_first):
         registers_value=0.0

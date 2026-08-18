@@ -13,6 +13,15 @@ class td5000:
     client_main = None
     client_detector = None
 
+    positions = {
+        "phi": 0.0,
+        "2theta": 0.0,
+        "omega": 0.0,
+        "kappa": 0.0,
+        "limit": 0.0,
+        "detector": 0.0
+    }
+
     #main_connected = False
     #detector_connected = False
 
@@ -242,6 +251,53 @@ class td5000:
         except Exception as e:
             print(f"Exception polling detector: {e}")
         return registers_value
+
+    # MOVEMENT COMMANDS:
+
+    def status(self):
+
+        # Poll main device (read holding registers 0..124)
+        try:
+            if self.client_main:
+                resp = self.client_main.read_holding_registers(address=0, count=125)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    self.positions["phi"] = self._regs_to_float(regs[109], regs[110])
+                    self.positions["2theta"] = self._regs_to_float(regs[15], regs[16])
+                    self.positions["omega"] = self._regs_to_float(regs[50], regs[51])
+                    self.positions["kappa"] = self._regs_to_float(regs[82], regs[83])
+                    self.positions["limit"] = self._regs_to_float(regs[68], 0)
+
+                    print("phi: " + str(self.positions["phi"]))
+                    print("2theta: " + str(self.positions["2theta"]))
+                    print("omega: " + str(self.positions["omega"]))
+                    print("kappa: " + str(self.positions["kappa"]))
+                    print("limit: " + str(self.positions["limit"]))
+                else:
+                    print(f"Main modbus read error: {resp}")
+            else:
+                print("Main client not connected")
+                pass
+        except Exception as e:
+            print(f"Exception polling main: {e}")
+
+        # Poll detector device (registers 13 & 14 per user)
+        try:
+            if self.client_detector:
+                resp = self.client_detector.read_holding_registers(address=13, count=2)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    self.positions["detector"] = self._regs_to_float(regs[0], regs[1])
+
+                    print("detector: " + str(self.positions["detector"]))
+                else:
+                    print(f"Detector modbus read error: {resp}")
+            else:
+                print("Detector client not connected")
+        except Exception as e:
+            print(f"Exception polling detector: {e}")
+
+        print("status sent")
 
     # Доработать позже!
     def check_limits(phi, theta, omega, kappa, detector_pos):

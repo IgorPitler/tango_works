@@ -225,10 +225,7 @@ def main():
                     print("Wrong command.")
 
             case "status":
-                try:
-                    print("status OK")
-                except Exception as e:
-                    pass
+                td_dev.status()
 
             case _:
                 print("command error")

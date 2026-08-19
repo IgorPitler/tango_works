@@ -255,7 +255,6 @@ class td5000:
     # MOVEMENT COMMANDS:
 
     def status(self):
-
         # Poll main device (read holding registers 0..124)
         try:
             if self.client_main:
@@ -298,6 +297,223 @@ class td5000:
             print(f"Exception polling detector: {e}")
 
         print("status sent")
+
+    # reserved, not use
+    def command_limit_reset(self):
+        self._send_safe_write('main', 120, 1024)
+        print("limit reset sent")
+
+    def command_shutter_open(self):
+        self._send_safe_write('main', 120, 512)
+        self._send_safe_write('main', 119, 512)
+        print("shutter open sent")
+
+    def command_shutter_close(self):
+        self._send_safe_write('main', 120, 512)
+        self._send_safe_write('main', 119, 512)
+        print("shutter close sent")
+
+    # PHI
+
+    def command_phi_abs(self, abs_value):
+        try:
+            self._send_safe_write('main', 100, 1280)
+            self._send_write_float('main', 105, 106, float(abs_value))
+            self._send_safe_write('main', 100, 2304)
+        except Exception as e:
+            print(f"command_phi_abs exception {e}")
+
+    def command_phi_rel(self, rel_value):
+        try:
+            self._send_safe_write('main', 100, 1280)
+            self._send_write_float('main', 103, 104, float(rel_value))
+            self._send_safe_write('main', 100, 4352)
+        except Exception as e:
+            print(f"command_phi_rel exception {e}")
+
+    def command_phi_speed(self, speed):
+        try:
+            self._send_safe_write('main', 100, 1280)
+            self._send_write_float('main', 107, 108, float(speed))
+        except Exception as e:
+            print(f"command_phi_speed exception {e}")
+
+    def command_phi_home(self):
+        try:
+            self._send_safe_write('main', 100, 1280)
+            self._send_safe_write('main', 101, 3)
+            self._send_safe_write('main', 100, 768)
+        except Exception as e:
+            print(f"command_phi_home exception {e}")
+
+    def command_phi_rotate(self):
+        try:
+            self._send_safe_write('main', 100, 1280)
+            self._send_safe_write('main', 100, 16640)
+        except Exception as e:
+            print(f"command_phi_rotate exception {e}")
+
+    def command_phi_stop(self):
+        try:
+            self._send_safe_write('main', 100, 1280)
+        except Exception as e:
+            print(f"command_phi_stop exception {e}")
+
+    # 2THETA
+
+    def command_tetta_stop(self):
+        try:
+            self._send_safe_write('main', 0, 1280)
+        except Exception as e:
+            print(f"command_tetta_stop exception {e}")
+
+    def command_tetta_speed(self, speed):
+        try:
+            self._send_safe_write('main', 0, 1280)
+            self._send_write_float('main', 7, 8, float(speed))
+        except Exception as e:
+            print(f"command_tetta_speed exception {e}")
+
+    def command_tetta_rel(self, rel_value):
+        try:
+            self._send_safe_write('main', 0, 1280)
+            self._send_write_float('main', 3, 4, float(rel_value))
+            self._send_safe_write('main', 0, 4352)
+        except Exception as e:
+            print(f"command_tetta_rel exception {e}")
+
+    def command_tetta_home(self):
+        try:
+            self._send_safe_write('main', 0, 1280)
+            self._send_safe_write('main', 1, 3)
+            self._send_safe_write('main', 0, 768)
+        except Exception as e:
+            print(f"command_tetta_home exception {e}")
+
+    def command_tetta_abs(self, abs_target):
+        try:
+            self._send_safe_write('main', 0, 1280)
+            self._send_write_float('main', 5, 6, float(abs_target))
+            self._send_safe_write('main', 0, 2304)
+        except Exception as e:
+            print(f"command_tetta_abs exception {e}")
+
+    # OMEGA
+
+    def command_omega_abs(self, abs_target):
+        try:
+            self._send_safe_write('main', 35, 1280)
+            self._send_write_float('main', 40, 41, float(abs_target))
+            self._send_safe_write('main', 35, 2304)
+        except Exception as e:
+            print(f"command_omega_abs exception {e}")
+
+    def command_omega_home(self):
+        try:
+            self._send_safe_write('main', 35, 1280)
+            self._send_safe_write('main', 36, 3)
+            self._send_safe_write('main', 35, 768)
+        except Exception as e:
+            print(f"command_omega_home exception {e}")
+
+    def command_omega_speed(self, speed):
+        try:
+            self._send_safe_write('main', 35, 1280)
+            self._send_write_float('main', 42, 43, float(speed))
+        except Exception as e:
+            print(f"command_omega_speed exception{e}")
+
+    def command_omega_rel(self, rel):
+        try:
+            self._send_safe_write('main', 35, 1280)
+            self._send_write_float('main', 38, 39, float(rel))
+            self._send_safe_write('main', 35, 4352)
+        except Exception as e:
+            print(f"command_omega_rel exception {e}")
+
+    def command_omega_stop(self):
+        try:
+            self._send_safe_write('main', 35, 1280)
+        except Exception as e:
+            print(f"command_omega_stop exception {e}")
+
+    # KAPPA
+
+    def command_kappa_speed(self, speed):
+        try:
+            self._send_safe_write('main', 70, 1280)
+            self._send_write_float('main', 76, 77, float(speed))
+        except Exception as e:
+            print(f"command_kappa_speed exception {e}")
+
+    def command_kappa_home(self):
+        try:
+            self._send_safe_write('main', 70, 1280)
+            self._send_safe_write('main', 71, 3)
+            self._send_safe_write('main', 70, 768)
+        except Exception as e:
+            print(f"command_kappa_home exception {e}")
+
+    def command_kappa_rel(self, rel_target):
+        try:
+            self._send_safe_write('main', 70, 1280)
+            self._send_write_float('main', 72, 73, float(rel_target))
+            self._send_safe_write('main', 70, 4352)
+        except Exception as e:
+            print(f"command_kappa_rel exception {e}")
+
+    def command_kappa_abs(self, abs_target):
+        try:
+            self._send_safe_write('main', 70, 1280)
+            self._send_write_float('main', 74, 75, float(abs_target))
+            self._send_safe_write('main', 70, 2304)
+        except Exception as e:
+            print(f"command_kappa_abs exception {e}")
+
+    def command_kappa_stop(self):
+        try:
+            self._send_safe_write('main', 70, 1280)
+        except Exception as e:
+            print(f"command_kappa_stop exception {e}")
+
+    # DETECTOR
+
+    def command_detector_stop(self):
+        try:
+            self._send_safe_write('detector', 0, 1280)
+        except Exception as e:
+            print(f"command_detector_stop exception {e}")
+
+    def command_detector_speed(self, speed):
+        try:
+            self._send_safe_write('detector', 0, 1280)
+            self._send_write_float('detector', 7, 8, float(speed))
+        except Exception as e:
+            print(f"command_detector_speed exception {e}")
+
+    def command_detector_rel(self, rel_target):
+        try:
+            self._send_safe_write('detector', 0, 1280)
+            self._send_write_float('detector', 3, 4, float(rel_target))
+            self._send_safe_write('detector', 0, 4352)
+        except Exception as e:
+            print(f"command_detector_rel exception {e}")
+
+    def command_detector_home(self):
+        try:
+            self._send_safe_write('detector', 0, 1280)
+            self._send_safe_write('detector', 1, 3)
+            self._send_safe_write('detector', 0, 768)
+        except Exception as e:
+            print(f"command_detector_home exception {e}")
+
+    def command_detector_abs(self, abs_target):
+        try:
+            self._send_safe_write('detector', 0, 1280)
+            self._send_write_float('detector', 5, 6, float(abs_target))
+            self._send_safe_write('detector', 0, 2304)
+        except Exception as e:
+            print(f"command_detector_abs exception {e}")
 
     # Доработать позже!
     def check_limits(phi, theta, omega, kappa, detector_pos):

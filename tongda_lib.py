@@ -1,3 +1,6 @@
+# Tongda TD-5000 console controls
+#v2.0
+
 import struct
 import time
 

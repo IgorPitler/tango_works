@@ -1,5 +1,5 @@
 # Tongda TD-5000 console controls
-#v1.0
+#v2.0
 
 import tongda_lib
 

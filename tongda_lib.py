@@ -34,7 +34,6 @@ class td5000:
     def connect_all(self):
         self.connect_main()
         self.connect_detector()
-        print("connect all sent")
 
     def connect_main(self):
         try:
@@ -48,7 +47,6 @@ class td5000:
         except Exception as e:
             print(f"Main connection error: {e}")
             self.client_main = None
-        print("connect main sent")
 
     def connect_detector(self):
         try:
@@ -61,12 +59,10 @@ class td5000:
         except Exception as e:
             print(f"Detector connection error: {e}")
             self.client_detector = None
-        print("connect detector sent")
 
     def disconnect_all(self):
         self.disconnect_main()
         self.disconnect_detector()
-        print("disconnect all sent")
 
     def disconnect_main(self):
         try:
@@ -79,7 +75,6 @@ class td5000:
                 print("Main client was not connected")
         except Exception as e:
             print(f"Disconnect main exception: {e}")
-        print("disconnect main sent")
 
     def disconnect_detector(self):
         try:
@@ -91,7 +86,6 @@ class td5000:
                 print("Detector client was not connected")
         except Exception as e:
             print(f"Disconnect detector exception: {e}")
-        print("disconnect detector sent")
 
     # for main only
     def _init_controller(self):
@@ -265,13 +259,13 @@ class td5000:
                     self.positions["2theta"] = self._regs_to_float(regs[15], regs[16])
                     self.positions["omega"] = self._regs_to_float(regs[50], regs[51])
                     self.positions["kappa"] = self._regs_to_float(regs[82], regs[83])
-                    self.positions["limit"] = self._regs_to_float(regs[68], 0)
+                    #self.positions["limit"] = self._regs_to_float(regs[68], 0)
 
                     print("phi: " + str(self.positions["phi"]))
                     print("2theta: " + str(self.positions["2theta"]))
                     print("omega: " + str(self.positions["omega"]))
                     print("kappa: " + str(self.positions["kappa"]))
-                    print("limit: " + str(self.positions["limit"]))
+                    #print("limit: " + str(self.positions["limit"]))
                 else:
                     print(f"Main modbus read error: {resp}")
             else:
@@ -296,22 +290,17 @@ class td5000:
         except Exception as e:
             print(f"Exception polling detector: {e}")
 
-        print("status sent")
-
     # reserved, not use
     def command_limit_reset(self):
         self._send_safe_write('main', 120, 1024)
-        print("limit reset sent")
 
     def command_shutter_open(self):
-        self._send_safe_write('main', 120, 512)
-        self._send_safe_write('main', 119, 512)
-        print("shutter open sent")
+        self._send_safe_write('main', 120, 256)
+        self._send_safe_write('main', 119, 2560)
 
     def command_shutter_close(self):
         self._send_safe_write('main', 120, 512)
         self._send_safe_write('main', 119, 512)
-        print("shutter close sent")
 
     # PHI
 
@@ -476,7 +465,7 @@ class td5000:
         except Exception as e:
             print(f"command_kappa_stop exception {e}")
 
-    # DETECTOR
+    # DETECTOR POSITION
 
     def command_detector_stop(self):
         try:
@@ -515,8 +504,4 @@ class td5000:
         except Exception as e:
             print(f"command_detector_abs exception {e}")
 
-    # Доработать позже!
-    def check_limits(phi, theta, omega, kappa, detector_pos):
-        allow = True
-        # here we will check if the axis positions are dangerous
-        return allow
+    # Доработать позже! в том числе сделать проверку перед движением для abs и rel

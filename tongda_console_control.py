@@ -58,7 +58,8 @@ def main():
                 except Exception as e:
                     print("Wrong command.")
 
-            case "detector":
+            # detector position
+            case "position":
                 try:
                     match command_input[1]:
                         case "home":
@@ -74,9 +75,9 @@ def main():
                         case "abs":
                             position = float(command_input[2])
                             #print(position)
-                            if position < 90:
+                            if position < 85:
                                 td_dev.command_detector_abs(position)
-                                print("detector abs OK")
+                                #print("detector abs OK")
                             else:
                                 print("danger detector position! no action!")
 
@@ -219,14 +220,15 @@ def main():
             case "home":
                 try:
                     match command_input[1]:
-                        case "all":
+                        case "axis":
                             #detector first
-                            td_dev.command_detector_home()
+                            #td_dev.command_detector_home()
                             td_dev.command_tetta_home()
                             td_dev.command_phi_home()
                             td_dev.command_omega_home()
                             td_dev.command_kappa_home()
                             #print("home all OK")
+
                         case _:
                             print("command error")
 

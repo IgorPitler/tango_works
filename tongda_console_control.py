@@ -255,11 +255,8 @@ def main():
                     match command_input[1]:
                         case "on":
                             td_dev.source_on()
-                            # print("shutter open OK")
                         case "off":
-                            td_dev.source_on()
-                            #td_dev.command_shutter_close()
-                            # print("shutter close OK")
+                            td_dev.source_off()
                         case "warmup":
                             td_dev.source_warmup()
                         case "status":
@@ -309,6 +306,26 @@ def main():
 
                 except Exception as e:
                     print("Wrong command")
+
+            # detector CAMSERVER imaging control
+            case "detector":
+                try:
+                    match command_input[1]:
+                        case "on":
+                            pass
+
+                        case "status":
+                            # print V & I and show on or off
+                            td_dev.source_status()
+
+                        case "setI":
+                            current = float(command_input[2])
+                            td_dev.source_setI(current)
+
+                        case _:
+                            print("command error")
+                except Exception as e:
+                    print("Wrong command.")
 
             case _:
                 print("command error")

@@ -525,4 +525,6 @@ class td5000:
     def source_setI(self, current):
         print(f"source setI {current}")
 
+
+
     # Доработать позже! в том числе сделать проверку перед движением для abs и rel

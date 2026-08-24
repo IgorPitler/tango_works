@@ -75,7 +75,7 @@ def main():
                         case "abs":
                             position = float(command_input[2])
                             #print(position)
-                            if position < 85:
+                            if position < 85.1:
                                 td_dev.command_detector_abs(position)
                                 #print("detector abs OK")
                             else:
@@ -217,6 +217,7 @@ def main():
                     print("Wrong command.")
 
             # home all
+            # need real test
             case "home":
                 try:
                     match command_input[1]:
@@ -244,6 +245,33 @@ def main():
                         case "close":
                             td_dev.command_shutter_close()
                             #print("shutter close OK")
+                        case _:
+                            print("command error")
+                except Exception as e:
+                    print("Wrong command.")
+
+            case "source":
+                try:
+                    match command_input[1]:
+                        case "on":
+                            td_dev.source_on()
+                            # print("shutter open OK")
+                        case "off":
+                            td_dev.source_on()
+                            #td_dev.command_shutter_close()
+                            # print("shutter close OK")
+                        case "warmup":
+                            td_dev.source_warmup()
+                        case "status":
+                            # print V & I and show on or off
+                            td_dev.source_status()
+                        case "setV":
+                            voltage=float(command_input[2])
+                            td_dev.source_setV(voltage)
+                        case "setI":
+                            current = float(command_input[2])
+                            td_dev.source_setI(current)
+
                         case _:
                             print("command error")
                 except Exception as e:

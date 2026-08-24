@@ -285,7 +285,7 @@ class td5000:
                     regs = resp.registers
                     self.positions["detector"] = self._regs_to_float(regs[0], regs[1])
 
-                    print("detector: " + str(self.positions["detector"]))
+                    print("detector position: " + str(self.positions["detector"]))
                 else:
                     print(f"Detector modbus read error: {resp}")
             else:
@@ -506,5 +506,23 @@ class td5000:
             self._send_safe_write('detector', 0, 2304)
         except Exception as e:
             print(f"command_detector_abs exception {e}")
+
+    def source_on(self):
+        print("source on")
+
+    def source_off(self):
+        print("source off")
+
+    def source_warmup(self):
+        print("source warmup")
+
+    def source_status(self):
+        print("source status")
+
+    def source_setV(self, voltage):
+        print(f"source setV {voltage}")
+
+    def source_setI(self, current):
+        print(f"source setI {current}")
 
     # Доработать позже! в том числе сделать проверку перед движением для abs и rel

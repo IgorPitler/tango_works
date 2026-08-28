@@ -293,6 +293,44 @@ class td5000:
         except Exception as e:
             print(f"Exception polling detector: {e}")
 
+    # for service use only
+    # use it to update postion array data without any output
+    def update_positions(self):
+        # Poll main device (read holding registers 0..124)
+        try:
+            if self.client_main:
+                resp = self.client_main.read_holding_registers(address=0, count=125)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    self.positions["phi"] = self._regs_to_float(regs[109], regs[110])
+                    self.positions["2theta"] = self._regs_to_float(regs[15], regs[16])
+                    self.positions["omega"] = self._regs_to_float(regs[50], regs[51])
+                    self.positions["kappa"] = self._regs_to_float(regs[82], regs[83])
+                    #self.positions["limit"] = self._regs_to_float(regs[68], 0)
+
+                else:
+                    print(f"Main modbus read error: {resp}")
+            else:
+                print("Main client not connected")
+                pass
+        except Exception as e:
+            print(f"Exception polling main: {e}")
+
+        # Poll detector device (registers 13 & 14 per user)
+        try:
+            if self.client_detector:
+                resp = self.client_detector.read_holding_registers(address=13, count=2)
+                if resp and not resp.isError():
+                    regs = resp.registers
+                    self.positions["detector"] = self._regs_to_float(regs[0], regs[1])
+
+                else:
+                    print(f"Detector modbus read error: {resp}")
+            else:
+                print("Detector client not connected")
+        except Exception as e:
+            print(f"Exception polling detector: {e}")
+
     # reserved, not use
     def command_limit_reset(self):
         self._send_safe_write('main', 120, 1024)

@@ -2,14 +2,20 @@
 #v2.0
 
 import tongda_lib
+import camserver
 
 def main():
     main_ip = "192.168.188.10"
     main_port = 502
     detector_ip = "192.168.188.30"
     detector_port = 502
+    camserver_ip="127.0.0.1"
+    camserver_port=8003
 
+    # movement control
     td_dev=tongda_lib.td5000(main_ip,main_port,detector_ip,detector_port)
+    # imaging control
+    cam=camserver.DectrisCamserver(camserver_ip, camserver_port)
 
     working = True
 

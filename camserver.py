@@ -78,11 +78,11 @@ class DectrisCamserver:
     def setExpPeriod(self, t : float):
         self.send_command("ExpPeriod "+str(t))
 
-    def setImgpath(self, data : str):
+    def set_imgpath(self, data : str):
         self.send_command("imgpath "+data)
 
     # prefer .CBF
-    def start_exposure(self, filename):
+    def start_Exposure(self, filename):
         self.send_command("Exposure "+filename)
 
     def close(self):
@@ -94,10 +94,7 @@ class DectrisCamserver:
 
 
 #print("CAMserver ok")
-
 #cam=DectrisCamserver()
 #cam.connect()
-
 #cam.send_command("test")
-
 #cam.close()

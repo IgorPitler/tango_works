@@ -15,7 +15,7 @@ def main():
     # movement control
     td_dev=tongda_lib.td5000(main_ip,main_port,detector_ip,detector_port)
     # imaging control
-    cam=camserver.DectrisCamserver(camserver_ip, camserver_port)
+    cam_dev=camserver.DectrisCamserver(camserver_ip, camserver_port)
 
     working = True
 
@@ -314,19 +314,37 @@ def main():
                     print("Wrong command")
 
             # detector CAMSERVER imaging control
-            case "detector":
+            case "camserver":
                 try:
                     match command_input[1]:
-                        case "on":
-                            pass
+                        case "connect":
+                            cam_dev.connect()
 
-                        case "status":
-                            # print V & I and show on or off
-                            td_dev.source_status()
+                        case "close":
+                            cam_dev.close()
 
-                        case "setI":
-                            current = float(command_input[2])
-                            td_dev.source_setI(current)
+                        case "Exposure":
+                            # param is filename, prefer .CBF
+                            cam_dev.start_Exposure(command_input[2])
+
+                        case "imgpath":
+                            cam_dev.set_imgpath(command_input[2])
+
+                        # test only, no params, writes Kappa 3.14
+                        case "MxSettings":
+                            cam_dev.setMxSettings("Kappa 3.14")
+
+                        case "ExpTime":
+                            t = float(command_input[2])
+                            cam_dev.setExpTime(t)
+
+                        case "ExpPeriod":
+                            t = float(command_input[2])
+                            cam_dev.setExpPeriod(t)
+
+                        case "NImages":
+                            n = int(command_input[2])
+                            cam_dev.setNImages(n)
 
                         case _:
                             print("command error")

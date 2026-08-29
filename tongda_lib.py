@@ -21,7 +21,7 @@ class td5000:
         "2theta": 0.0,
         "omega": 0.0,
         "kappa": 0.0,
-        "limit": 0.0,
+        #"limit": 0.0,
         "detector": 0.0
     }
 
@@ -332,8 +332,8 @@ class td5000:
             print(f"Exception polling detector: {e}")
 
     # reserved, not use
-    def command_limit_reset(self):
-        self._send_safe_write('main', 120, 1024)
+    #def command_limit_reset(self):
+    #    self._send_safe_write('main', 120, 1024)
 
     def command_shutter_open(self):
         self._send_safe_write('main', 120, 256)

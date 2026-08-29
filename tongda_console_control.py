@@ -280,17 +280,17 @@ def main():
                 except Exception as e:
                     print("Wrong command.")
 
-            case "limit":
-                try:
-                    match command_input[1]:
-                        case "reset":
-                            td_dev.command_limit_reset()
-                            #print("limit reset OK")
-                        case _:
-                            print("command error")
-
-                except Exception as e:
-                    print("Wrong command.")
+            #case "limit":
+            #    try:
+            #        match command_input[1]:
+            #            case "reset":
+            #                td_dev.command_limit_reset()
+            #                #print("limit reset OK")
+            #            case _:
+            #                print("command error")
+            #
+            #    except Exception as e:
+            #        print("Wrong command.")
 
             case "status":
                 td_dev.status()

@@ -36,6 +36,14 @@ class Colors:
     END_COLOR = '\033[0m'  # Reset to default color
 
 
-print(Colors.BRIGHT_GREEN+"Fuck the world"+Colors.END_COLOR)
-print(Colors.RED+Colors.BACKGROUND_BLUE+"Fuck the world"+Colors.END_COLOR)
-print(Colors.WHITE+Colors.BACKGROUND_BLUE+"  Fuck the world  "+Colors.END_COLOR)
+#print(Colors.BRIGHT_GREEN+"Fuck the world"+Colors.END_COLOR)
+#print(Colors.RED+Colors.BACKGROUND_BLUE+"Fuck the world"+Colors.END_COLOR)
+#print(Colors.WHITE+Colors.BACKGROUND_BLUE+"  Fuck the world  "+Colors.END_COLOR)
+
+data0=["a","b","c"]
+data={"a": "b", "c": "d"}
+#print(data0[2])
+#print(data["a"])
+data0.append("d")
+for x in data0:
+    print(x)

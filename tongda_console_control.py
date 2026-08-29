@@ -19,7 +19,7 @@ def main():
 
     working = True
 
-    print("Tongda TD-5000 console controls")
+    print("Tongda TD-5000 & Pilatus3 console controls")
 
     while working:
         command_input=input("> ").strip().split()

@@ -332,7 +332,7 @@ def main():
 
                         # test only, no params, writes Kappa 3.14
                         case "MxSettings":
-                            cam_dev.setMxSettings("Kappa 3.14")
+                            cam_dev.setMxSettings("Kappa 3.14 Omega 2.75")
 
                         case "ExpTime":
                             t = float(command_input[2])

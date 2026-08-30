@@ -274,6 +274,10 @@ def main():
                         case "setI":
                             current = float(command_input[2])
                             td_dev.source_setI(current)
+                        case "getV":
+                            td_dev.source_getV()
+                        case "getI":
+                            td_dev.source_getI()
 
                         case _:
                             print("command error")
@@ -309,6 +313,23 @@ def main():
                     td_dev.command_omega_abs(omega_pos)
                     td_dev.command_kappa_abs(kappa_pos)
                     td_dev.command_detector_abs(detector_pos)
+
+                except Exception as e:
+                    print("Wrong command")
+
+
+            # TEST
+            # safety theta omega kappa detector_pos
+            case "safety":
+                try:
+                    theta_pos = float(command_input[1])
+                    omega_pos = float(command_input[2])
+                    kappa_pos = float(command_input[3])
+                    detector_pos = float(command_input[4])
+                    if td_dev.safety_check(theta_pos, omega_pos, kappa_pos, detector_pos):
+                        print("Operation safe. OK.")
+                    else:
+                        print("Operation unsafe, forbidden!")
 
                 except Exception as e:
                     print("Wrong command")

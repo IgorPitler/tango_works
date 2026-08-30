@@ -4,6 +4,7 @@
 import struct
 import time
 
+from prompt_toolkit.application import current
 from pymodbus.client import ModbusTcpClient
 
 class td5000:
@@ -556,6 +557,8 @@ class td5000:
 
     def source_status(self):
         print("source status")
+        self.source_getV()
+        self.source_getI()
 
     def source_setV(self, voltage):
         print(f"source setV {voltage}")
@@ -563,6 +566,43 @@ class td5000:
     def source_setI(self, current):
         print(f"source setI {current}")
 
+    def source_getV(self) -> float:
+        voltage=50000
+        print(f"source getV {voltage}")
+        return voltage
 
+    def source_getI(self) -> float:
+        current=12
+        print(f"source getI {current}")
+        return current
 
-    # Доработать позже! в том числе сделать проверку перед движением для abs и rel
+    def safety_check(self, theta : float = 0, omega : float = 0, kappa : float = 0, detector_pos : float = 0) -> bool:
+        allow= True
+
+        if detector_pos < 0 or detector_pos > 65 :
+            return False
+
+        if theta < -65 or theta > 90 :
+            return False
+
+        if kappa < -72 or theta > 72 :
+            return False
+
+        if kappa == 0 :
+            if omega < theta-90 or omega > theta+90 :
+                return False
+
+        if kappa < 0 :
+            if omega < theta-90 or omega > theta+30 :
+                return False
+
+        if kappa > 0 :
+            if omega < theta-30 or omega > theta+90 :
+                return False
+
+        return allow
+
+    # TODO, return 4 values!
+    def safety_rel_to_abs(self):
+        res=1
+        return res

@@ -4,7 +4,6 @@
 import struct
 import time
 
-from prompt_toolkit.application import current
 from pymodbus.client import ModbusTcpClient
 
 class td5000:
@@ -296,7 +295,8 @@ class td5000:
 
     # for service use only
     # use it to update postion array data without any output
-    def update_positions(self):
+    def update_positions(self) -> bool:
+        update_ok= True
         # Poll main device (read holding registers 0..124)
         try:
             if self.client_main:
@@ -311,11 +311,13 @@ class td5000:
 
                 else:
                     print(f"Main modbus read error: {resp}")
+                    update_ok = False
             else:
                 print("Main client not connected")
-                pass
+                update_ok = False
         except Exception as e:
             print(f"Exception polling main: {e}")
+            update_ok = False
 
         # Poll detector device (registers 13 & 14 per user)
         try:
@@ -327,10 +329,15 @@ class td5000:
 
                 else:
                     print(f"Detector modbus read error: {resp}")
+                    update_ok = False
             else:
                 print("Detector client not connected")
+                update_ok = False
         except Exception as e:
             print(f"Exception polling detector: {e}")
+            update_ok = False
+
+        return update_ok
 
     # reserved, not use
     #def command_limit_reset(self):
@@ -576,7 +583,8 @@ class td5000:
         print(f"source getI {current}")
         return current
 
-    def safety_check(self, theta : float = 0, omega : float = 0, kappa : float = 0, detector_pos : float = 0) -> bool:
+    # update postions and use them before calling it from abs movement commands. check all before abs move!
+    def safety_check_abs(self, theta : float = 0, omega : float = 0, kappa : float = 0, detector_pos : float = 0) -> bool:
         allow= True
 
         if detector_pos < 0 or detector_pos > 65 :
@@ -602,7 +610,25 @@ class td5000:
 
         return allow
 
-    # TODO, return 4 values!
-    def safety_rel_to_abs(self):
-        res=1
-        return res
+    def safety_check_rel(self, theta_rel : float, omega_rel : float, kappa_rel : float, det_pos_rel : float) -> bool:
+        are_positions_updated=self.update_positions()
+        if are_positions_updated == False:
+            print("ERROR: Can't get actual positions. Movement forbidden.")
+            allow = False
+            return allow
+
+        # check future postions after rel move
+        t, o, k, d=self.positions_rel_to_abs(self.positions["2theta"], theta_rel,
+                                             self.positions["omega"], omega_rel,
+                                             self.positions["kappa"], kappa_rel,
+                                             self.positions["detector"], det_pos_rel)
+
+        allow=self.safety_check_abs(t, o, k, d)
+
+        return allow
+
+    # return 4 values!
+    def positions_rel_to_abs(self, theta_abs : float, theta_rel : float, omega_abs : float, omega_rel : float,
+        kappa_abs : float, kappa_rel : float, det_pos_abs : float, det_pos_rel : float) -> tuple[float, float,float,float]:
+
+        return theta_abs+theta_rel, omega_abs+omega_rel, kappa_abs+kappa_rel, det_pos_abs+det_pos_rel

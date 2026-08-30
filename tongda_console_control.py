@@ -375,6 +375,7 @@ def main():
             case _:
                 print("command error")
 
+    #print (td_dev.positions_rel_to_abs(1,1,2,2,3,3,4,4))
 
 if __name__ == '__main__':
     main()

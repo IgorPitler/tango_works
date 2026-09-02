@@ -320,13 +320,13 @@ def main():
 
             # TEST
             # safety theta omega kappa detector_pos
-            case "safety":
+            case "safety_abs":
                 try:
                     theta_pos = float(command_input[1])
                     omega_pos = float(command_input[2])
                     kappa_pos = float(command_input[3])
                     detector_pos = float(command_input[4])
-                    if td_dev.safety_check(theta_pos, omega_pos, kappa_pos, detector_pos):
+                    if td_dev.safety_check_abs(theta_pos, omega_pos, kappa_pos, detector_pos):
                         print("Operation safe. OK.")
                     else:
                         print("Operation unsafe, forbidden!")

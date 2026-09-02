@@ -334,6 +334,20 @@ def main():
                 except Exception as e:
                     print("Wrong command")
 
+            case "safety_rel":
+                try:
+                    theta_rel_pos = float(command_input[1])
+                    omega_rel_pos = float(command_input[2])
+                    kappa_rel_pos = float(command_input[3])
+                    detector_rel_pos = float(command_input[4])
+                    if td_dev.safety_check_rel(theta_rel_pos, omega_rel_pos, kappa_rel_pos, detector_rel_pos):
+                        print("Operation safe. OK.")
+                    else:
+                        print("Operation unsafe, forbidden!")
+
+                except Exception as e:
+                    print("Wrong command")
+
             # detector CAMSERVER imaging control
             case "camserver":
                 try:

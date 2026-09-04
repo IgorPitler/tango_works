@@ -3,7 +3,7 @@ import socket
 class DectrisCamserver:
 
     # seconds
-    operation_timeout=600
+    operation_timeout=200
 
     def __init__(self, camserver_ip="127.0.0.1", camserver_port : int = 8002):
         self.camserver_ip=camserver_ip

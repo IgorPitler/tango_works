@@ -13,13 +13,13 @@ class DectrisCamserver:
             # operation timeout in seconds
             self.soc.settimeout(self.operation_timeout)
         except Exception as e:
-            print("Error creating socket")
+            print(f"Error creating socket {e}")
 
     def connect(self):
         try:
             self.soc.connect((self.camserver_ip, self.camserver_port))
         except Exception as e:
-            print("CAMserver connection error")
+            print(f"CAMserver connection error {e}")
 
     def send_command(self, command : str):
         try:

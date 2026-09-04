@@ -9,8 +9,8 @@ def main():
     main_port = 502
     detector_ip = "192.168.188.30"
     detector_port = 502
-    camserver_ip="127.0.0.1"
-    camserver_port=8003
+    camserver_ip="192.168.0.20"
+    camserver_port=41234
 
     # movement control
     td_dev=tongda_lib.td5000(main_ip,main_port,detector_ip,detector_port)

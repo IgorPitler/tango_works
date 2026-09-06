@@ -371,8 +371,11 @@ class td5000:
 
     def command_phi_speed(self, speed):
         try:
-            self._send_safe_write('main', 100, 1280)
-            self._send_write_float('main', 107, 108, float(speed))
+            if float(speed) >= -36 and float(speed) <= 36 :
+                self._send_safe_write('main', 100, 1280)
+                self._send_write_float('main', 107, 108, float(speed))
+            else:
+                print("Incorrect PHI speed")
         except Exception as e:
             print(f"command_phi_speed exception {e}")
 
@@ -407,8 +410,11 @@ class td5000:
 
     def command_tetta_speed(self, speed):
         try:
-            self._send_safe_write('main', 0, 1280)
-            self._send_write_float('main', 7, 8, float(speed))
+            if float(speed) >= -18 and float(speed) <= 18:
+                self._send_safe_write('main', 0, 1280)
+                self._send_write_float('main', 7, 8, float(speed))
+            else:
+                print("Incorrect 2THETA speed")
         except Exception as e:
             print(f"command_tetta_speed exception {e}")
 
@@ -456,8 +462,11 @@ class td5000:
 
     def command_omega_speed(self, speed):
         try:
-            self._send_safe_write('main', 35, 1280)
-            self._send_write_float('main', 42, 43, float(speed))
+            if float(speed) >= -18 and float(speed) <= 18:
+                self._send_safe_write('main', 35, 1280)
+                self._send_write_float('main', 42, 43, float(speed))
+            else:
+                print("Incorrect OMEGA speed.")
         except Exception as e:
             print(f"command_omega_speed exception{e}")
 
@@ -479,8 +488,12 @@ class td5000:
 
     def command_kappa_speed(self, speed):
         try:
-            self._send_safe_write('main', 70, 1280)
-            self._send_write_float('main', 76, 77, float(speed))
+            if float(speed) >= -18 and float(speed) <= 18:
+                self._send_safe_write('main', 70, 1280)
+                self._send_write_float('main', 76, 77, float(speed))
+            else:
+                print("Incorrect KAPPA speed")
+
         except Exception as e:
             print(f"command_kappa_speed exception {e}")
 
@@ -524,8 +537,11 @@ class td5000:
 
     def command_detector_speed(self, speed):
         try:
-            self._send_safe_write('detector', 0, 1280)
-            self._send_write_float('detector', 7, 8, float(speed))
+            if float(speed) >= -18 and float(speed) <= 18:
+                self._send_safe_write('detector', 0, 1280)
+                self._send_write_float('detector', 7, 8, float(speed))
+            else:
+                print("Incorrect DETECTOR position speed.")
         except Exception as e:
             print(f"command_detector_speed exception {e}")
 

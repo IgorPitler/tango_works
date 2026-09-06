@@ -85,9 +85,15 @@ class DectrisCamserver:
     def start_Exposure(self, filename):
         self.send_command("Exposure "+filename)
 
-    def close(self):
+    def socket_shutdown(self):
         try:
             self.soc.shutdown(socket.SHUT_RDWR)
+        except Exception as e:
+            print("Error shutdown socket")
+
+    # use AFTER shutdown
+    def close(self):
+        try:
             self.soc.close()
         except Exception as e:
             print("Error closing socket")

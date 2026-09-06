@@ -28,6 +28,12 @@ def main():
 
             case "exit":
                 working=False
+
+                td_dev.disconnect_all()
+                # disconnect CAMserver
+                cam_dev.socket_shutdown()
+                cam_dev.close()
+
                 print("Exiting. See you later!")
 
             case "connect":
@@ -35,6 +41,8 @@ def main():
                     match command_input[1]:
                         case "all":
                             td_dev.connect_all()
+                            # connect CAMserver
+                            cam_dev.connect()
                             #print("connect all OK")
                         case "main":
                             td_dev.connect_main()
@@ -52,6 +60,8 @@ def main():
                     match command_input[1]:
                         case "all":
                             td_dev.disconnect_all()
+                            # CAMserver
+                            cam_dev.close()
                             #print("disconnect all OK")
                         case "main":
                             td_dev.disconnect_main()

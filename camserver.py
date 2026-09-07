@@ -97,10 +97,3 @@ class DectrisCamserver:
             self.soc.close()
         except Exception as e:
             print("Error closing socket")
-
-
-#print("CAMserver ok")
-#cam=DectrisCamserver()
-#cam.connect()
-#cam.send_command("test")
-#cam.close()

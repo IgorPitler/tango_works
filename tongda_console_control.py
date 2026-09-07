@@ -358,6 +358,9 @@ def main():
                 except Exception as e:
                     print("Wrong command")
 
+            case "safety_model":
+                td_dev.safety_model_run()
+
             # detector CAMSERVER imaging control
             case "camserver":
                 try:

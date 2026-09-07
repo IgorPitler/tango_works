@@ -648,3 +648,10 @@ class td5000:
         kappa_abs : float, kappa_rel : float, det_pos_abs : float, det_pos_rel : float) -> tuple[float, float,float,float]:
 
         return theta_abs+theta_rel, omega_abs+omega_rel, kappa_abs+kappa_rel, det_pos_abs+det_pos_rel
+
+    def safety_model_run(self):
+        print("Starting model...")
+
+
+
+        print("Model end.")

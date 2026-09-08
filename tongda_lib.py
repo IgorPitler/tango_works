@@ -659,20 +659,33 @@ class td5000:
         time_counter=0
         #time_step in parameters
 
-        theta_time=(theta_end-theta_start)/theta_speed
-        omega_time=(omega_end-omega_start)/omega_speed
-        kappa_time=(kappa_end-kappa_start)/kappa_speed
-        detector_time=(detector_end-detector_start)/detector_speed
-        time_list=[theta_time, omega_time, kappa_time, detector_time]
+        # check direction on every axis
+        # what about negative speed?
+
+        theta_time_all=abs((theta_end-theta_start)/theta_speed)
+        omega_time_all=abs((omega_end-omega_start)/omega_speed)
+        kappa_time_all=abs((kappa_end-kappa_start)/kappa_speed)
+        detector_time_all=abs((detector_end-detector_start)/detector_speed)
+        time_list=[theta_time_all, omega_time_all, kappa_time_all, detector_time_all]
         max_time=ceil(max(time_list))
+
+        theta_pos=theta_start
+        omega_pos=omega_start
+        kappa_pos=kappa_start
+        detector_pos=detector_start
 
         print("Starting model....")
 
         model_running = True
 
         while model_running:
-            print("modeling")
-            model_running = False
+            print("modeling... time: "+str(time_counter))
+
+
+
+            time_counter=time_counter+time_step
+            if time_counter > max_time :
+                model_running = False
 
 
 

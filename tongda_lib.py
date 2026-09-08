@@ -3,6 +3,7 @@
 
 import struct
 import time
+from math import ceil
 
 from pymodbus.client import ModbusTcpClient
 
@@ -649,8 +650,29 @@ class td5000:
 
         return theta_abs+theta_rel, omega_abs+omega_rel, kappa_abs+kappa_rel, det_pos_abs+det_pos_rel
 
-    def safety_model_run(self):
+    def safety_model_run(self, theta_start : float = 0, theta_end : float = 0, theta_speed : float = 1,
+                               omega_start : float = 0, omega_end : float = 0, omega_speed : float = 1,
+                               kappa_start : float = 0, kappa_end : float = 0, kappa_speed : float = 1,
+                               detector_start : float = 0, detector_end : float = 0, detector_speed : float = 1,
+                               time_step : float = 1):
+
+        time_counter=0
+        #time_step in parameters
+
+        theta_time=(theta_end-theta_start)/theta_speed
+        omega_time=(omega_end-omega_start)/omega_speed
+        kappa_time=(kappa_end-kappa_start)/kappa_speed
+        detector_time=(detector_end-detector_start)/detector_speed
+        time_list=[theta_time, omega_time, kappa_time, detector_time]
+        max_time=ceil(max(time_list))
+
         print("Starting model...")
+
+        model_running = True
+
+        while model_running:
+            print("modeling")
+            model_running = False
 
 
 

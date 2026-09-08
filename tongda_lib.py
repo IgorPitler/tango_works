@@ -666,7 +666,7 @@ class td5000:
         time_list=[theta_time, omega_time, kappa_time, detector_time]
         max_time=ceil(max(time_list))
 
-        print("Starting model...")
+        print("Starting model....")
 
         model_running = True
 

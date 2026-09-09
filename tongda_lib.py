@@ -703,6 +703,7 @@ class td5000:
                 print("DANGER ZONE!")
                 # stop cycle
                 model_running = False
+                break
 
             # make step movement
             # THETA

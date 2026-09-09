@@ -650,16 +650,25 @@ class td5000:
 
         return theta_abs+theta_rel, omega_abs+omega_rel, kappa_abs+kappa_rel, det_pos_abs+det_pos_rel
 
+    def get_moving_direction(self, start_pos : float, end_pos : float):
+        if end_pos < start_pos:
+            moving_direction = -1
+        else:
+            moving_direction = 1
+
+        return moving_direction
+
     def safety_model_run(self, theta_start : float = 0, theta_end : float = 0, theta_speed : float = 1,
                                omega_start : float = 0, omega_end : float = 0, omega_speed : float = 1,
                                kappa_start : float = 0, kappa_end : float = 0, kappa_speed : float = 1,
                                detector_start : float = 0, detector_end : float = 0, detector_speed : float = 1,
-                               time_step : float = 1):
+                               time_step : float = 0.5):
+
+        is_position_safe=True
 
         time_counter=0
         #time_step in parameters
 
-        # check direction on every axis
         # what about negative speed?
 
         theta_time_all=abs((theta_end-theta_start)/theta_speed)
@@ -667,26 +676,53 @@ class td5000:
         kappa_time_all=abs((kappa_end-kappa_start)/kappa_speed)
         detector_time_all=abs((detector_end-detector_start)/detector_speed)
         time_list=[theta_time_all, omega_time_all, kappa_time_all, detector_time_all]
-        max_time=ceil(max(time_list))
+        max_time=max(time_list)
 
         theta_pos=theta_start
+        theta_dir=self.get_moving_direction(theta_start, theta_end)
         omega_pos=omega_start
+        omega_dir=self.get_moving_direction(omega_start, omega_end)
         kappa_pos=kappa_start
+        kappa_dir=self.get_moving_direction(kappa_start, kappa_end)
         detector_pos=detector_start
+        detector_dir=self.get_moving_direction(detector_start, detector_end)
 
         print("Starting model....")
 
         model_running = True
 
         while model_running:
-            print("modeling... time: "+str(time_counter))
+            print("time: "+str(time_counter))
+            print("Theta "+str(theta_pos)+" Omega "+str(omega_pos)+" Kappa "+str(kappa_pos)+" Detector position "+str(detector_pos))
 
+            # check position safety here
+            is_position_safe=self.safety_check_abs(theta_pos, omega_pos, kappa_pos, detector_pos)
+
+            if is_position_safe :
+                print("Safe OK")
+            else :
+                print("DANGER ZONE!")
+                model_running = False
+
+            # make step movement
+            # THETA
+            if time_counter <= theta_time_all and theta_start != theta_end :
+                theta_pos=theta_pos+theta_dir*time_step*theta_speed
+            # OMEGA
+            if time_counter <= omega_time_all and omega_start != omega_end:
+                omega_pos=omega_pos+omega_dir*time_step*omega_speed
+            # KAPPA
+            if time_counter <= kappa_time_all and kappa_start != kappa_end:
+                kappa_pos=kappa_pos+kappa_dir*time_step*kappa_speed
+            # DETECTOR
+            if time_counter <= detector_time_all and detector_start != detector_end:
+                detector_pos=detector_pos+detector_dir*time_step*detector_speed
 
 
             time_counter=time_counter+time_step
             if time_counter > max_time :
                 model_running = False
 
-
-
         print("Model end.")
+
+        return is_position_safe

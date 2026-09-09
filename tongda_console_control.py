@@ -361,7 +361,7 @@ def main():
             case "safety_model":
                 td_dev.safety_model_run(0,0,1,
                                         0, 0, 1,
-                                        0, 0, 1,
+                                        0, 73, 1,
                                         0, 85, 1, 0.5)
 
             # detector CAMSERVER imaging control

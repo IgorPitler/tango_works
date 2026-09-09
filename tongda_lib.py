@@ -610,7 +610,7 @@ class td5000:
         if theta < -65 or theta > 90 :
             return False
 
-        if kappa < -72 or theta > 72 :
+        if kappa < -72 or kappa > 72 :
             return False
 
         if kappa == 0 :
@@ -667,7 +667,6 @@ class td5000:
         is_position_safe=True
 
         time_counter=0
-        #time_step in parameters
 
         # what about negative speed?
 
@@ -702,6 +701,7 @@ class td5000:
                 print("Safe OK")
             else :
                 print("DANGER ZONE!")
+                # stop cycle
                 model_running = False
 
             # make step movement
@@ -717,7 +717,6 @@ class td5000:
             # DETECTOR
             if time_counter <= detector_time_all and detector_start != detector_end:
                 detector_pos=detector_pos+detector_dir*time_step*detector_speed
-
 
             time_counter=time_counter+time_step
             if time_counter > max_time :

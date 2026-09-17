@@ -658,6 +658,8 @@ class td5000:
 
         return moving_direction
 
+    # this version is for different ending times on each axies
+    # make special version for synced time for all axis?!!!!
     def safety_model_run(self, theta_start : float = 0, theta_end : float = 0, theta_speed : float = 1,
                                omega_start : float = 0, omega_end : float = 0, omega_speed : float = 1,
                                kappa_start : float = 0, kappa_end : float = 0, kappa_speed : float = 1,

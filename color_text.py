@@ -37,7 +37,7 @@ class Colors:
 
 
 #print(Colors.BRIGHT_GREEN+"Fuck the world"+Colors.END_COLOR)
-#print(Colors.RED+Colors.BACKGROUND_BLUE+"Fuck the world"+Colors.END_COLOR)
+print(Colors.RED+Colors.BACKGROUND_BLUE+"Fuck the world"+Colors.END_COLOR)
 #print(Colors.WHITE+Colors.BACKGROUND_BLUE+"  Fuck the world  "+Colors.END_COLOR)
 
 data0=["a","b","c"]

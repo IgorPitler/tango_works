@@ -5,6 +5,8 @@ from timeit import default_timer as timer
 
 class async_class():
 
+    log=""
+
     def __init__(self, pause_value: int = 1):
         self.pause_value=pause_value
         print(f"Class init {pause_value} sec OK")
@@ -13,11 +15,13 @@ class async_class():
         print("Start 1st")
         await asyncio.sleep(self.pause_value+5)
         print("Done 1st")
+        self.log=self.log+"Done 1st"
 
     async  def do_something2(self):
         print("Start 2st")
         await asyncio.sleep(self.pause_value)
         print("Done 2st")
+        self.log = self.log + "Done 2st"
 
 async def main():
 
@@ -32,6 +36,7 @@ async def main():
     await task2
 
     print("Main job is done")
+    print("Log: "+my_async.log)
 
     ###########
 

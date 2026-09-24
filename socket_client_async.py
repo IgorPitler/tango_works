@@ -64,3 +64,10 @@ try:
     soc.close()
 except Exception as e:
     print("Error closing socket")
+
+class async_socket:
+
+
+
+    def __init__(self):
+        pass

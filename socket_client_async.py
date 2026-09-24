@@ -1,4 +1,5 @@
 import socket
+import asyncio
 
 print("Socket client:")
 
@@ -67,7 +68,24 @@ except Exception as e:
 
 class async_socket:
 
-
-
     def __init__(self):
         pass
+
+    async def connect(self):
+        pass
+
+    async def message(self, message_text):
+        pass
+
+    async def close(self):
+        pass
+
+async def main():
+    mysoc=async_socket()
+    await mysoc.connect()
+    await mysoc.message("test1")
+    await mysoc.message("test2")
+    await mysoc.message("test3")
+    await mysoc.close()
+
+asyncio.run(main())

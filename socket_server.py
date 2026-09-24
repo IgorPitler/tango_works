@@ -1,4 +1,5 @@
 import socket
+import time
 
 print("socket server started:")
 print("waiting for connection:")
@@ -22,6 +23,9 @@ while working:
         working = False
         client_socket.close()
     else:
+        ### TEMPORARY FOR TEST.
+        time.sleep(5)
+
         answer_message="Your message: "+client_data
         client_socket.sendall(answer_message.encode())
         print(client_data)

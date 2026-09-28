@@ -62,8 +62,8 @@ class xray_source:
         return res
 
 x=xray_source("/dev/ttyUSB0", 9600, 2)
-#x.connect()
-#x.test1()
-#x.disconnect()
+x.connect()
+x.test1()
+x.disconnect()
 print(x.get_12bit_value(49999, 50000))
 print(x.get_real_value_of_12bit(4095, 50000))

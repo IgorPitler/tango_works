@@ -3,6 +3,7 @@
 
 import tongda_lib
 import camserver
+import xray
 
 def main():
     main_ip = "192.168.188.10"
@@ -16,6 +17,12 @@ def main():
     td_dev=tongda_lib.td5000(main_ip,main_port,detector_ip,detector_port)
     # imaging control
     cam_dev=camserver.DectrisCamserver(camserver_ip, camserver_port)
+    # xray source control
+    xray_port_name="COM5"
+    xray_baud_rate=9600
+    xray_timeout=2
+    xray_dev=xray.XraySource(xray_port_name, xray_baud_rate, xray_timeout)
+
 
     working = True
 
@@ -33,6 +40,8 @@ def main():
                 # disconnect CAMserver
                 cam_dev.socket_shutdown()
                 cam_dev.close()
+                # disconnect Xray source
+                xray_dev.disconnect()
 
                 print("Exiting. See you later!")
 
@@ -43,6 +52,8 @@ def main():
                             td_dev.connect_all()
                             # connect CAMserver
                             cam_dev.connect()
+                            # connect xray source
+                            xray_dev.connect()
                             #print("connect all OK")
                         case "main":
                             td_dev.connect_main()
@@ -62,6 +73,8 @@ def main():
                             td_dev.disconnect_all()
                             # CAMserver
                             cam_dev.close()
+                            # disconnect xray source
+                            xray_dev.disconnect()
                             #print("disconnect all OK")
                         case "main":
                             td_dev.disconnect_main()

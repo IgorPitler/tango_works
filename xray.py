@@ -2,7 +2,7 @@
 import time
 import py_serial_lib
 
-class xray_source:
+class XraySource:
 
     port_name="/dev/ttyUSB0"
     baud_rate = 9600
@@ -61,7 +61,8 @@ class xray_source:
         res=round((value/4095)*hardware_max)
         return res
 
-x=xray_source("/dev/ttyUSB0", 9600, 2)
+# test !
+x=XraySource("/dev/ttyUSB0", 9600, 2)
 x.connect()
 x.test1()
 x.disconnect()

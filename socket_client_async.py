@@ -18,42 +18,26 @@ class async_socket:
 
     async def connect(self):
         try:
-            self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # operation timeout in seconds
-            self.soc.settimeout(self.operation_timeout)
-        except Exception as e:
-            print(f"Error creating socket {e}")
 
-        try:
-            self.soc.connect((self.camserver_ip, self.camserver_port))
-            ans = self.soc.recv(1024).decode()
-            print("Connection answer: " + ans)
         except Exception as e:
-            print(f"Socket connection error {e}")
+            print(f"Connect error {e}")
+
+
 
     async def message(self, message_text : str):
 
         try:
-            command = message_text
-            self.soc.sendall(command.encode())
-            # print server answer
-            ans = self.soc.recv(1024).decode()
-            print("Answer: " + ans)
+
 
         except Exception as e:
             print("Error sending command")
 
     async def close(self):
         try:
-            self.soc.shutdown(socket.SHUT_RDWR)
-        except Exception as e:
-            print("Error shutdown socket")
 
-        # use AFTER shutdown
-        try:
-            self.soc.close()
         except Exception as e:
-            print("Error closing socket")
+            print("Closing error")
+
 
 async def main():
     mysoc=async_socket()

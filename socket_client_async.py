@@ -29,7 +29,7 @@ class async_socket:
             self.writer.write(message_text.encode())
             await self.writer.drain()
 
-            data = await self.reader.read(2000)
+            data = await self.reader.read(100)
             print(f'Received: {data.decode()!r}')
             return data.decode()
         except Exception as e:
@@ -48,12 +48,12 @@ async def main():
     mysoc=async_socket("127.0.0.1", 12345)
     await mysoc.connect()
     ans=await mysoc.send_command("test1")
+    print(ans)
+    #print("1-2")
+    #ans=await mysoc.send_command("test2")
     #print(ans)
-    print("1-2")
-    ans=await mysoc.send_command("test2")
-    #print(ans)
-    print("2-3")
-    ans=await mysoc.send_command("test3")
+    #print("2-3")
+    #ans=await mysoc.send_command("test3")
     #print(ans)
     await mysoc.close()
 

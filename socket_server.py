@@ -24,7 +24,7 @@ while working:
         client_socket.close()
     else:
         ### TEMPORARY FOR TEST.
-        time.sleep(1)
+        #time.sleep(1)
 
         answer_message="Your message: "+client_data
         client_socket.sendall(answer_message.encode())

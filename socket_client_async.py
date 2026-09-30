@@ -9,7 +9,6 @@ print("Async Socket client:")
 
 class async_socket:
 
-    data=""
     # seconds
     #operation_timeout = 200
 

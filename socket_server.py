@@ -24,10 +24,10 @@ while working:
         client_socket.close()
     else:
         ### TEMPORARY FOR TEST.
-        #time.sleep(1)
+        time.sleep(3)
 
         answer_message="Your message: "+client_data
-        client_socket.sendall(answer_message.encode())
+        client_socket.send(answer_message.encode())
         print(client_data)
         if client_data=="exit":
             print("Exiting")

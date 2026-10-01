@@ -83,6 +83,13 @@ print(x.get_real_value_of_12bit(4095, 50000))
 
 print(x.prepare_command(1,2,3,4))
 
+#txt = "welcome, to the jungle"
+txt = "1,2,3 ,4 "
+
+x = txt.split(",")
+
+for v in x:
+    print("_"+v.strip(" ")+"_")
 
 
 
